@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -26,16 +27,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-    }
-
-    override fun onResume() {
-        super.onResume()
         setUp()
     }
 
     private fun setUp() {
+        val disableDevelopmentMode = Settings.Secure.getInt(this.contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED , 0) == 0
         val usbReceiver: BroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
+                if (disableDevelopmentMode) {
+                    return
+                }
+
                 val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
                 val batteryStatus = context.registerReceiver(null, filter)
 
