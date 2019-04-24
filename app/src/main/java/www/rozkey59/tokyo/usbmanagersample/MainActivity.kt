@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
                 val batteryStatus = context.registerReceiver(null, filter)
 
-                val status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+                val status = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
                 if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL) {
                     val animation = ValueAnimator.ofFloat(1500f, 0f)
                     animation.interpolator = AccelerateInterpolator()
